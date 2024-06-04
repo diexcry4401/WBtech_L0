@@ -1,4 +1,4 @@
-package main
+package db_connection
 
 import (
 	"database/sql"
@@ -26,7 +26,7 @@ func DB_Connect() (*sql.DB, error) {
 		fmt.Println("Ошибка получения пути до директории:", err)
 		return nil, err
 	}
-
+	// Чтение конфига для подключения к Posgres
 	config, err := os.Open(filepath.Join(dir, "db_config.json"))
 	if err != nil {
 		fmt.Println("Ошибка чтения конфига:", err)
@@ -38,7 +38,7 @@ func DB_Connect() (*sql.DB, error) {
 	decoder := json.NewDecoder(config)
 	err = decoder.Decode(&configFile)
 	if err != nil {
-		fmt.Println("Ошибка декодирования конфига:", err)
+		fmt.Println("Ошибка чтения данных конфига:", err)
 		return nil, err
 	}
 	var connectionStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s", configFile.Host, configFile.Port, configFile.User, configFile.Password, configFile.Dbname)
