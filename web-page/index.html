@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Order Details</h1>
+        <div class="order-section">
+            <label for="orderNumberInput">Введите номер заказа:</label>
+            <input type="text" id="orderNumberInput" placeholder="Номер заказа">
+            <button onclick="fetchOrderDetails()">Проверить заказ</button>
+        </div>
+        <div id="orderDetails"></div>
+    </div>
+
+    <script>
+        // JavaScript для получения данных из API и отображения на странице
+        async function fetchOrderDetails() {
+            const orderNumber = document.getElementById('orderNumberInput').value;
+            const response = await fetch(`http://localhost:3001/api/${orderNumber}`);
+            
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Формирование строки с данными заказа
+                let orderDetailsHtml = `<h2>Order ${orderNumber} Details</h2>`;
+                orderDetailsHtml += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+                
+                // Вывод данных на страницу
+                document.getElementById('orderDetails').innerHTML = orderDetailsHtml;
+            } else if (response.status === 404) {
+                // Обработка случая, когда заказ не найден
+                document.getElementById('orderDetails').innerHTML = "<p>Order not found</p>";
+            } else {
+                // Обработка других возможных ошибок
+                document.getElementById('orderDetails').innerHTML = "<p>Something went wrong</p>";
+            }
+        }
+    </script>
+</body>
+</html>

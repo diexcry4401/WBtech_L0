@@ -1,4 +1,4 @@
-package nats_streaming_connect
+package connect_nats_streaming
 
 import (
 	"database/sql"
@@ -50,7 +50,6 @@ func СonnectingNats(db *sql.DB, c *memcache.Cache) error {
 func InsertOrder(db *sql.DB, order Order, c *memcache.Cache) error {
 
 	fmt.Println("Данные записываются в БД")
-
 	tx, err := db.Begin()
 	if err != nil {
 		return err
@@ -110,7 +109,7 @@ func InsertOrder(db *sql.DB, order Order, c *memcache.Cache) error {
 			return err
 		}
 	}
-
+	fmt.Printf("Заказ номер %d записан в БД", orderID)
 	c.Set(fmt.Sprintf("%d", orderID), order, 0)
 	return tx.Commit()
 }

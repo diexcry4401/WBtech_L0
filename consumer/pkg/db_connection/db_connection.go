@@ -27,31 +27,27 @@ func DB_Connect() (*sql.DB, error) {
 		return nil, err
 	}
 	// Чтение конфига для подключения к Posgres
-	config, err := os.Open(filepath.Join(dir, "pkg/db_connection/db_config.json"))
+	configFile, err := os.Open(filepath.Join(dir, "pkg/db_connection/db_config.json"))
 	if err != nil {
 		fmt.Println("Ошибка чтения конфига:", err)
 		return nil, err
 	}
-	defer config.Close()
+	defer configFile.Close()
 
-	var configFile Config
-	decoder := json.NewDecoder(config)
-	err = decoder.Decode(&configFile)
+	var config Config
+	decoder := json.NewDecoder(configFile)
+	err = decoder.Decode(&config)
 	if err != nil {
 		fmt.Println("Ошибка чтения данных конфига:", err)
 		return nil, err
 	}
-	var connectionStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s", configFile.Host, configFile.Port, configFile.User, configFile.Password, configFile.Dbname)
+	var connectionStr = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", config.Host, config.Port, config.User, config.Password, config.Dbname)
 	db, err := sql.Open("postgres", connectionStr)
 	if err != nil {
 		fmt.Println("Ошибка подключения:", err)
 		return nil, err
 	} else {
-		log.Println("Успешное подключение к PostgresSQL по порту:", configFile.Port)
+		log.Println("Успешное подключение к PostgresSQL по порту:", config.Port)
 		return db, nil
 	}
-}
-
-func main() {
-	DB_Connect()
 }
