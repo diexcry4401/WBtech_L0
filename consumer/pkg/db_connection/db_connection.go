@@ -27,7 +27,7 @@ func DB_Connect() (*sql.DB, error) {
 		return nil, err
 	}
 	// Чтение конфига для подключения к Posgres
-	config, err := os.Open(filepath.Join(dir, "db_config.json"))
+	config, err := os.Open(filepath.Join(dir, "pkg/db_connection/db_config.json"))
 	if err != nil {
 		fmt.Println("Ошибка чтения конфига:", err)
 		return nil, err
