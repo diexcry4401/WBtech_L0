@@ -27,17 +27,16 @@
                 const data = await response.json();
                 
                 // Формирование строки с данными заказа
-                let orderDetailsHtml = `<h2>Order ${orderNumber} Details</h2>`;
+                let orderDetailsHtml = `<h2>Заказ номер ${orderNumber}, информация:</h2>`;
                 orderDetailsHtml += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
                 
                 // Вывод данных на страницу
                 document.getElementById('orderDetails').innerHTML = orderDetailsHtml;
             } else if (response.status === 404) {
-                // Обработка случая, когда заказ не найден
-                document.getElementById('orderDetails').innerHTML = "<p>Order not found</p>";
+                document.getElementById('orderDetails').innerHTML = "<p>Заказ не найден(</p>";
             } else {
                 // Обработка других возможных ошибок
-                document.getElementById('orderDetails').innerHTML = "<p>Something went wrong</p>";
+                document.getElementById('orderDetails').innerHTML = "<p>Что-то пошло не так</p>";
             }
         }
     </script>
